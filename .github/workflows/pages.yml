@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - name: Parse browser modules
+        run: |
+          node --input-type=module --check < src/music.js
+          node --input-type=module --check < src/app.js
   deploy:
     needs: test
     environment:
