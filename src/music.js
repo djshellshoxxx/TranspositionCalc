@@ -10,8 +10,9 @@ const OPEN_MAJOR = ['1d','8d','3d','10d','5d','12d','7d','2d','9d','4d','11d','6
 const OPEN_MINOR = ['10m','5m','12m','7m','2m','9m','4m','11m','6m','1m','8m','3m'];
 
 export function pitchClass(key) {
-  const k = String(key ?? '').trim();
-  if (!(k in PC)) throw new Error(`Unknown key: ${key}`);
+  const raw = String(key ?? '').trim().replace('♯', '#').replace('♭', 'b');
+  const k = raw.charAt(0).toUpperCase() + raw.slice(1);
+  if (!Object.hasOwn(PC, k)) throw new Error(`Unknown key: ${key}`);
   return PC[k];
 }
 
@@ -91,6 +92,7 @@ export function noteDurations(bpm) {
 }
 
 export function loopDuration(bpm, bars=4, beatsPerBar=4) {
+  if (!(Number(bpm) > 0)) throw new Error('BPM must be greater than zero');
   return (60000 / Number(bpm)) * Number(beatsPerBar) * Number(bars) / 1000;
 }
 
@@ -126,7 +128,7 @@ export function harmonicNeighbors(key, quality='major', prefer='sharp') {
   for(let pc=0;pc<12;pc++){
     for(const q of ['major','minor']){
       const cam=camelotForKey(names[pc],q);
-      if(targets.includes(cam)) rows.push({key:names[pc],quality:q,camelot:cam,relation:cam===current?'same key':cam===relative?'relative major/minor':'adjacent Camelot'});
+      if(targets.includes(cam)) rows.push({key:names[pc],quality:q,camelot:cam,relation:cam===current?'same key':cam===relative?'relative major/minor':cam===`${next}${letter}`?'+1 Camelot (dominant)':'-1 Camelot (subdominant)'});
     }
   }
   return rows.sort((a,b)=>targets.indexOf(a.camelot)-targets.indexOf(b.camelot));
@@ -160,7 +162,34 @@ export function allTargets(sourceKey, sourceBpm=null, prefer='sharp') {
       cents:centsFromSemitones(semitones),
       ratio,
       percent:(ratio-1)*100,
-      resultingBpm: sourceBpm ? Number(sourceBpm)*ratio : null
+      resultingBpm: Number(sourceBpm) > 0 ? Number(sourceBpm)*ratio : null
     };
   });
+}
+
+export function transposeKey(key, semitones, prefer='sharp') {
+  const names = prefer === 'flat' ? FLAT_NAMES : SHARP_NAMES;
+  return names[(((pitchClass(key) + Math.round(Number(semitones))) % 12) + 12) % 12];
+}
+
+// Key you land on if the source tempo is reached purely by varispeed (pitch follows speed).
+export function keyAfterVarispeed(key, sourceBpm, targetBpm, prefer='sharp') {
+  const { semitones } = djVarispeed(sourceBpm, targetBpm);
+  const nearest = Math.round(semitones);
+  return { semitones, nearest, key: transposeKey(key, nearest, prefer), cents: (semitones - nearest) * 100 };
+}
+
+// Picks the target tempo (as-is, half or double) that needs the smallest time-stretch.
+export function bestTempoFold(sourceBpm, targetBpm) {
+  const t = Number(targetBpm);
+  stretchPercent(sourceBpm, t);
+  return [1, 0.5, 2]
+    .map((factor) => ({ factor, bpm: t * factor, percent: stretchPercent(sourceBpm, t * factor) }))
+    .reduce((a, b) => (Math.abs(b.percent) < Math.abs(a.percent) ? b : a));
+}
+
+export function delayHz(bpm, noteFraction = 1) {
+  const b = Number(bpm);
+  if (!(b > 0)) throw new Error('BPM must be greater than zero');
+  return b / 60 / Number(noteFraction);
 }

@@ -1,14 +1,177 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs."><meta name="theme-color" content="#0b1018"><title>Transposition Calculator · Circuit Drift Labs</title><link rel="icon" type="image/svg+xml" href="./favicon.svg"><link rel="stylesheet" href="./styles.css"></head>
-<body><header class="topbar"><a class="brand" href="https://djshellshoxxx.github.io/circuitdriftlabs/" target="_blank" rel="noreferrer"><span class="brand-mark">CDL</span><span><strong>Circuit Drift Labs</strong><small>Audio tools lab</small></span></a><nav><a href="#matcher">Sample Matcher</a><a href="#timing">Timing</a><a href="#dj">DJ Varispeed</a><a href="#tools">Tools</a></nav></header>
-<main><section class="hero"><div><p class="eyebrow">CIRCUIT DRIFT LABS / UTILITY 02</p><h1>Transposition Calculator</h1><p>Key, pitch, playback-rate, BPM, harmonic-mixing and loop calculations without opening a DAW.</p></div><div class="hero-chip">LOCAL · STATIC · NO ACCOUNT</div></section>
-<section class="panel primary" id="matcher"><div class="section-head"><div><span>01</span><h2>Sample Matcher</h2></div><p>Move a track or sample from one key and tempo to another.</p></div><div class="grid four"><label>Source key<select id="sourceKey"></select></label><label>Target key<select id="targetKey"></select></label><label>Source BPM<input id="sourceBpm" type="number" min="1" step="0.01" value="132"></label><label>Target BPM<input id="targetBpm" type="number" min="1" step="0.01" value="174"></label><label>Source duration (sec)<input id="sourceDuration" type="number" min="0" step="0.001" value="30"></label><label>Source quality<select id="sourceQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label><label>Target quality<select id="targetQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label><label>Direction<select id="direction"><option value="shortest">Shortest</option><option value="up">Up only</option><option value="down">Down only</option></select></label><label>Notation<select id="notation"><option value="sharp">Sharps</option><option value="flat">Flats</option></select></label></div><div class="result-grid" id="mainResults"></div><div class="callout" id="workflowNote"></div><div class="context-link"><strong>Want to see how this track fits into the rest of your library?</strong><a href="https://djshellshoxxx.github.io/trackstats/">Analyze your collection with TrackStats →</a></div></section>
-<section class="panel"><div class="section-head"><div><span>02</span><h2>All target keys</h2></div><p>Every chromatic destination from the current source.</p></div><div class="table-wrap"><table><thead><tr><th>Key</th><th>Semitones</th><th>Cents</th><th>Rate</th><th>Speed</th><th>Result BPM</th></tr></thead><tbody id="targetsBody"></tbody></table></div></section>
-<section class="panel"><div class="section-head"><div><span>03</span><h2>Harmonic neighbors</h2></div><p>Same-key, relative major/minor and adjacent Camelot relationships for the current source key.</p></div><div class="table-wrap compact"><table><thead><tr><th>Key</th><th>Camelot</th><th>Relationship</th></tr></thead><tbody id="harmonicBody"></tbody></table></div></section>
-<section class="panel" id="timing"><div class="section-head"><div><span>04</span><h2>BPM & loop timing</h2></div><p>Beat lengths, bar lengths, implied BPM, half/double-time references and tempo drift.</p></div><div class="grid four"><label>BPM<input id="timingBpm" type="number" min="1" step="0.01" value="174"></label><label>Bars<input id="bars" type="number" min="1" step="1" value="8"></label><label>Beats / bar<input id="beatsPerBar" type="number" min="1" step="1" value="4"></label><label>Observed loop seconds<input id="observedSeconds" type="number" min="0.001" step="0.001" value="11.034"></label></div><div class="result-grid" id="timingResults"></div><div class="table-wrap compact"><table><thead><tr><th>Length</th><th>Milliseconds</th></tr></thead><tbody id="noteBody"></tbody></table></div></section>
-<section class="panel"><div class="section-head"><div><span>05</span><h2>Drift calculator</h2></div><p>See how far an unstretched loop moves against a project tempo.</p></div><div class="grid four"><label>Loop BPM<input id="driftSource" type="number" min="1" step="0.01" value="173.5"></label><label>Project BPM<input id="driftTarget" type="number" min="1" step="0.01" value="174"></label><label>Bars<input id="driftBars" type="number" min="1" step="1" value="32"></label><label>Beats / bar<input id="driftBeats" type="number" min="1" step="1" value="4"></label></div><div class="result-grid" id="driftResults"></div></section>
-<section class="panel" id="dj"><div class="section-head"><div><span>06</span><h2>DJ pitch-fader / varispeed</h2></div><p>Calculate the pitch consequence of changing tempo without key lock.</p></div><div class="grid two"><label>Original BPM<input id="djSource" type="number" min="1" step="0.01" value="174"></label><label>Deck target BPM<input id="djTarget" type="number" min="1" step="0.01" value="180"></label></div><div class="result-grid" id="djResults"></div><div id="djNote" class="callout"></div></section>
-<section class="panel" id="tools"><div class="section-head"><div><span>07</span><h2>Reverse & frequency tools</h2></div><p>Work backwards from playback rate or frequency.</p></div><div class="split"><div class="subpanel"><h3>Playback rate → pitch</h3><label>Playback rate<input id="reverseRate" type="number" min="0.01" step="0.001" value="1.059463"></label><div class="mini-result" id="reverseResult"></div></div><div class="subpanel"><h3>Note → frequency</h3><div class="grid two"><label>Note<select id="freqNote"></select></label><label>Octave<input id="freqOctave" type="number" min="-1" max="9" value="4"></label><label>A4 reference<input id="a4" type="number" min="400" max="480" step="0.1" value="440"></label><label>Frequency to inspect<input id="inspectFreq" type="number" min="1" step="0.01" value="440"></label></div><div class="mini-result" id="frequencyResult"></div></div></div></section>
-<section class="panel tap-panel"><div class="section-head"><div><span>08</span><h2>Tap tempo</h2></div><p>Rolling average of recent taps.</p></div><button id="tapButton" class="tap">TAP</button><div class="tap-readout"><strong id="tapBpm">—</strong><span>BPM</span><button id="tapReset">Reset</button></div></section>
-<section class="panel related"><div class="section-head"><div><span>CDL</span><h2>More Circuit Drift Labs tools</h2></div></div><div class="tool-grid"><a href="https://djshellshoxxx.github.io/trackstats/" target="_blank" rel="noreferrer"><strong>TrackStats</strong><span>Analyze formats, bitrate, keys, BPM and metadata across a music library.</span></a><a href="https://djshellshoxxx.github.io/Miditest/" target="_blank" rel="noreferrer"><strong>MIDItest</strong><span>Inspect and diagnose MIDI controllers in the browser.</span></a><a href="https://djshellshoxxx.github.io/loudnessbatch/" target="_blank" rel="noreferrer"><strong>LoudnessBatch</strong><span>Analyze loudness, dynamics, stereo and reference mixes.</span></a><a href="https://djshellshoxxx.github.io/PartyPosterGen/" target="_blank" rel="noreferrer"><strong>PartyPosterGen</strong><span>Create rave, DJ, hip-hop and party flyers.</span></a></div><div class="experiments"><span>Experiments</span><a href="https://djshellshoxxx.github.io/binerualwebeats/">Binaural Web Beats</a><a href="https://djshellshoxxx.github.io/babbleforge/">BabbleForge</a></div></section></main>
-<footer><a href="https://djshellshoxxx.github.io/circuitdriftlabs/">Circuit Drift Labs</a><span>Open-source audio tools.</span></footer><script type="module" src="./src/app.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs.">
+<meta name="theme-color" content="#0b1018">
+<title>Transposition Calculator · Circuit Drift Labs</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="stylesheet" href="./styles.css">
+<script>try{var t=localStorage.getItem('tc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="https://djshellshoxxx.github.io/circuitdriftlabs/" target="_blank" rel="noreferrer" data-tip="Visit the Circuit Drift Labs home page (opens in a new tab).">
+    <span class="brand-mark">CDL</span><span><strong>Circuit Drift Labs</strong><small>Audio tools lab</small></span>
+  </a>
+  <nav id="nav" aria-label="Sections">
+    <a href="#matcher" data-tip="Key and tempo matching between two tracks.">Matcher</a>
+    <a href="#timing" data-tip="Beat, bar and loop timing.">Timing</a>
+    <a href="#dj" data-tip="Pitch-fader maths for decks without key lock.">DJ</a>
+    <a href="#tools" data-tip="Playback rate, frequency and tap tempo.">Tools</a>
+  </nav>
+  <button id="themeBtn" class="icon-btn" type="button" aria-label="Toggle light/dark theme" data-tip="Switch between dark and light theme.">◐</button>
+</header>
+
+<main>
+<section class="hero">
+  <div>
+    <p class="eyebrow">CIRCUIT DRIFT LABS / UTILITY 02</p>
+    <h1>Transposition <span>Calculator</span></h1>
+    <p>Key, pitch, playback-rate, BPM, harmonic-mixing and loop maths without opening a DAW.</p>
+  </div>
+  <div class="hero-chip">LOCAL · STATIC · NO ACCOUNT</div>
+</section>
+
+<section class="panel primary" id="matcher">
+  <div class="section-head"><div><span class="num">01</span><h2>Sample Matcher</h2></div><p>Move a track or sample from one key and tempo to another. <em class="hint">Hover any label or result for an explanation.</em></p></div>
+
+  <div class="match-grid">
+    <div class="card">
+      <h3>Source <small>what you have</small></h3>
+      <div class="grid two">
+        <label data-tip="The key of the original sample or track (its tonic note)."><span class="lbl">Key</span><select id="sourceKey"></select></label>
+        <label data-tip="Whether the source is in a major or minor scale. Used for Camelot / Open Key codes and harmonic neighbours."><span class="lbl">Quality</span><select id="sourceQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label>
+        <label data-tip="Tempo of the original in beats per minute."><span class="lbl">BPM</span><input id="sourceBpm" type="number" min="1" step="any" value="132" inputmode="decimal"></label>
+        <label data-tip="Length of the original audio in seconds (optional). Used to predict the new length after a speed or tempo change."><span class="lbl">Duration (sec)</span><input id="sourceDuration" type="number" min="0" step="any" value="30" inputmode="decimal"></label>
+      </div>
+    </div>
+    <button id="swapBtn" class="swap" type="button" aria-label="Swap source and target" data-tip="Swap source and target (key, quality and BPM).">⇄</button>
+    <div class="card">
+      <h3>Target <small>where it needs to go</small></h3>
+      <div class="grid two">
+        <label data-tip="The key you want to arrive at."><span class="lbl">Key</span><select id="targetKey"></select></label>
+        <label data-tip="Major or minor quality of the target key. Only affects the Camelot / Open Key labels."><span class="lbl">Quality</span><select id="targetQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label>
+        <label data-tip="Tempo of your project or the other deck in beats per minute."><span class="lbl">BPM</span><input id="targetBpm" type="number" min="1" step="any" value="174" inputmode="decimal"></label>
+        <label data-tip="Which way to travel to reach the target key. Shortest never moves more than 6 semitones; Up/Down force a direction (0–11 semitones)."><span class="lbl">Direction</span><select id="direction"><option value="shortest">Shortest</option><option value="up">Up only</option><option value="down">Down only</option></select></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="inline" data-tip="Show note names with sharps (C#) or flats (Db). Pitch maths is identical."><span class="lbl">Notation</span><select id="notation"><option value="sharp">Sharps</option><option value="flat">Flats</option></select></label>
+    <button id="copyLink" type="button" class="btn" data-tip="Copy a link that restores every value on this page.">Copy share link</button>
+    <button id="copyResults" type="button" class="btn" data-tip="Copy the matcher results as plain text.">Copy results</button>
+    <button id="resetBtn" type="button" class="btn ghost" data-tip="Restore all matcher inputs to their defaults.">Reset</button>
+    <span id="toast" class="toast" role="status" aria-live="polite"></span>
+  </div>
+
+  <div class="headline" id="headline" aria-live="polite"></div>
+  <div class="result-grid" id="mainResults" aria-live="polite"></div>
+  <div class="callout" id="workflowNote" aria-live="polite"></div>
+  <div class="context-link" data-tip="Opens TrackStats, another Circuit Drift Labs tool."><strong>Want to see how this track fits into the rest of your library?</strong><a href="https://djshellshoxxx.github.io/trackstats/">Analyze your collection with TrackStats →</a></div>
+</section>
+
+<section class="panel">
+  <div class="section-head"><div><span class="num">02</span><h2>All target keys</h2></div><p>Every chromatic destination from the current source. Your selected target is highlighted.</p></div>
+  <div class="table-wrap"><table><thead><tr>
+    <th data-tip="Destination key.">Key</th>
+    <th data-tip="Shift in semitones (half-steps). Positive is up, negative is down.">Semitones</th>
+    <th data-tip="Shift in cents. 100 cents = 1 semitone.">Cents</th>
+    <th data-tip="Playback-rate multiplier needed if pitch and speed move together.">Rate</th>
+    <th data-tip="Same change expressed as a speed percentage.">Speed</th>
+    <th data-tip="Source BPM after that varispeed change (needs a source BPM).">Result BPM</th>
+  </tr></thead><tbody id="targetsBody"></tbody></table></div>
+</section>
+
+<section class="panel">
+  <div class="section-head"><div><span class="num">03</span><h2>Harmonic neighbors</h2></div><p>Keys that mix well with the source key on the Camelot wheel.</p></div>
+  <div class="table-wrap compact"><table><thead><tr>
+    <th data-tip="A key that blends harmonically with the source.">Key</th>
+    <th data-tip="Camelot wheel code. Same number = relative major/minor; ±1 number = a fifth up/down.">Camelot</th>
+    <th data-tip="How the key relates to the source.">Relationship</th>
+  </tr></thead><tbody id="harmonicBody"></tbody></table></div>
+</section>
+
+<section class="panel" id="timing">
+  <div class="section-head"><div><span class="num">04</span><h2>BPM &amp; loop timing</h2></div><p>Beat lengths, bar lengths, implied BPM and half/double-time references.</p></div>
+  <div class="grid four">
+    <label data-tip="Tempo to convert into millisecond note lengths."><span class="lbl">BPM</span><input id="timingBpm" type="number" min="1" step="any" value="174" inputmode="decimal"></label>
+    <label data-tip="How many bars the loop contains."><span class="lbl">Bars</span><input id="bars" type="number" min="1" step="1" value="8" inputmode="numeric"></label>
+    <label data-tip="Beats in each bar (4 for 4/4, 3 for 3/4 …)."><span class="lbl">Beats / bar</span><input id="beatsPerBar" type="number" min="1" step="1" value="4" inputmode="numeric"></label>
+    <label data-tip="Measured length of the loop in seconds. Used to work out its real BPM."><span class="lbl">Observed loop seconds</span><input id="observedSeconds" type="number" min="0.001" step="any" value="11.034" inputmode="decimal"></label>
+  </div>
+  <div class="result-grid" id="timingResults" aria-live="polite"></div>
+  <div class="table-wrap compact"><table><thead><tr>
+    <th data-tip="Note value (quarter note = one beat).">Length</th>
+    <th data-tip="Duration of that note in milliseconds, handy for delay and reverb times.">Milliseconds</th>
+    <th data-tip="Frequency of an LFO or delay repeat synced to that note.">Hz</th>
+  </tr></thead><tbody id="noteBody"></tbody></table></div>
+</section>
+
+<section class="panel">
+  <div class="section-head"><div><span class="num">05</span><h2>Drift calculator</h2></div><p>See how far an unstretched loop slides against a project tempo.</p></div>
+  <div class="grid four">
+    <label data-tip="Native tempo of the loop you will NOT time-stretch."><span class="lbl">Loop BPM</span><input id="driftSource" type="number" min="1" step="any" value="173.5" inputmode="decimal"></label>
+    <label data-tip="Tempo of the project the loop is playing in."><span class="lbl">Project BPM</span><input id="driftTarget" type="number" min="1" step="any" value="174" inputmode="decimal"></label>
+    <label data-tip="Number of bars the loop plays before you measure the drift."><span class="lbl">Bars</span><input id="driftBars" type="number" min="1" step="1" value="32" inputmode="numeric"></label>
+    <label data-tip="Beats in each bar."><span class="lbl">Beats / bar</span><input id="driftBeats" type="number" min="1" step="1" value="4" inputmode="numeric"></label>
+  </div>
+  <div class="result-grid" id="driftResults" aria-live="polite"></div>
+</section>
+
+<section class="panel" id="dj">
+  <div class="section-head"><div><span class="num">06</span><h2>DJ pitch-fader / varispeed</h2></div><p>The pitch consequence of changing tempo with key lock off.</p></div>
+  <div class="grid two">
+    <label data-tip="The track's original BPM."><span class="lbl">Original BPM</span><input id="djSource" type="number" min="1" step="any" value="174" inputmode="decimal"></label>
+    <label data-tip="The BPM you want the deck to play at."><span class="lbl">Deck target BPM</span><input id="djTarget" type="number" min="1" step="any" value="180" inputmode="decimal"></label>
+  </div>
+  <div class="result-grid" id="djResults" aria-live="polite"></div>
+  <div id="djNote" class="callout" aria-live="polite"></div>
+</section>
+
+<section class="panel" id="tools">
+  <div class="section-head"><div><span class="num">07</span><h2>Reverse &amp; frequency tools</h2></div><p>Work backwards from playback rate or frequency.</p></div>
+  <div class="split">
+    <div class="card"><h3>Playback rate → pitch</h3>
+      <label data-tip="A speed multiplier such as 1.0595 (+1 semitone) or 0.5 (half speed, one octave down)."><span class="lbl">Playback rate</span><input id="reverseRate" type="number" min="0.01" step="any" value="1.059463" inputmode="decimal"></label>
+      <div class="mini-result" id="reverseResult" aria-live="polite"></div></div>
+    <div class="card"><h3>Note ↔ frequency</h3>
+      <div class="grid two">
+        <label data-tip="Note name to convert into a frequency."><span class="lbl">Note</span><select id="freqNote"></select></label>
+        <label data-tip="Octave number in scientific pitch notation (middle C = C4)."><span class="lbl">Octave</span><input id="freqOctave" type="number" min="-1" max="9" step="1" value="4" inputmode="numeric"></label>
+        <label data-tip="Tuning reference for A4. 440 Hz is standard; 432 Hz and others are sometimes used."><span class="lbl">A4 reference (Hz)</span><input id="a4" type="number" min="400" max="480" step="any" value="440" inputmode="decimal"></label>
+        <label data-tip="Enter any frequency to find the nearest note and how many cents sharp or flat it is."><span class="lbl">Frequency to inspect (Hz)</span><input id="inspectFreq" type="number" min="1" step="any" value="440" inputmode="decimal"></label>
+      </div>
+      <div class="mini-result" id="frequencyResult" aria-live="polite"></div></div>
+  </div>
+</section>
+
+<section class="panel tap-panel">
+  <div class="section-head"><div><span class="num">08</span><h2>Tap tempo</h2></div><p>Rolling average of your last 8 taps. Press <kbd>T</kbd> to tap from the keyboard.</p></div>
+  <div class="tap-row">
+    <button id="tapButton" class="tap" type="button" data-tip="Tap in time with the music (or press T). Resets after 2.5 s of silence.">TAP</button>
+    <div class="tap-readout"><strong id="tapBpm">—</strong><span>BPM</span></div>
+    <button id="tapReset" class="btn ghost" type="button" data-tip="Clear tap history.">Reset</button>
+    <button id="tapUse" class="btn" type="button" data-tip="Send the tapped BPM to the Source BPM field in the Sample Matcher.">Use as source BPM</button>
+  </div>
+</section>
+
+<section class="panel related">
+  <div class="section-head"><div><span class="num">CDL</span><h2>More Circuit Drift Labs tools</h2></div></div>
+  <div class="tool-grid">
+    <a href="https://djshellshoxxx.github.io/trackstats/" target="_blank" rel="noreferrer"><strong>TrackStats</strong><span>Analyze formats, bitrate, keys, BPM and metadata across a music library.</span></a>
+    <a href="https://djshellshoxxx.github.io/Miditest/" target="_blank" rel="noreferrer"><strong>MIDItest</strong><span>Inspect and diagnose MIDI controllers in the browser.</span></a>
+    <a href="https://djshellshoxxx.github.io/loudnessbatch/" target="_blank" rel="noreferrer"><strong>LoudnessBatch</strong><span>Analyze loudness, dynamics, stereo and reference mixes.</span></a>
+    <a href="https://djshellshoxxx.github.io/PartyPosterGen/" target="_blank" rel="noreferrer"><strong>PartyPosterGen</strong><span>Create rave, DJ, hip-hop and party flyers.</span></a>
+  </div>
+  <div class="experiments"><span>Experiments</span><a href="https://djshellshoxxx.github.io/binerualwebeats/">Binaural Web Beats</a><a href="https://djshellshoxxx.github.io/babbleforge/">BabbleForge</a></div>
+</section>
+</main>
+
+<footer><a href="https://djshellshoxxx.github.io/circuitdriftlabs/">Circuit Drift Labs</a><span>Open-source audio tools.</span></footer>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<script type="module" src="./src/app.js"></script>
+</body>
+</html>
