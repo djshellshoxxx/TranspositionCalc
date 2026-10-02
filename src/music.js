@@ -59,6 +59,26 @@ export function durationAfterRate(seconds, rate) {
   return Number(seconds) / r;
 }
 
+export function durationAfterTempoChange(seconds, sourceBpm, targetBpm) {
+  const s = Number(sourceBpm), t = Number(targetBpm);
+  if (!(s > 0) || !(t > 0)) throw new Error('BPM values must be greater than zero');
+  return Number(seconds) * s / t;
+}
+
+export function djVarispeed(sourceBpm, targetBpm) {
+  const s=Number(sourceBpm), t=Number(targetBpm);
+  if (!(s>0) || !(t>0)) throw new Error('BPM values must be greater than zero');
+  const ratio=t/s;
+  const semitones=semitonesFromRatio(ratio);
+  return {ratio,percent:(ratio-1)*100,semitones,cents:semitones*100};
+}
+
+export function halfDoubleTime(bpm) {
+  const b=Number(bpm);
+  if (!(b>0)) throw new Error('BPM must be greater than zero');
+  return {half:b/2,double:b*2,threeQuarter:b*.75,oneAndHalf:b*1.5};
+}
+
 export function noteDurations(bpm) {
   const b = Number(bpm);
   if (!(b > 0)) throw new Error('BPM must be greater than zero');
@@ -92,6 +112,24 @@ export function camelotForKey(key, quality='major') {
 export function openKeyForKey(key, quality='major') {
   const pc = pitchClass(key);
   return quality === 'minor' ? OPEN_MINOR[pc] : OPEN_MAJOR[pc];
+}
+
+export function harmonicNeighbors(key, quality='major', prefer='sharp') {
+  const current=camelotForKey(key,quality);
+  const match=current.match(/^(\d+)([AB])$/);
+  if(!match) return [];
+  const number=Number(match[1]),letter=match[2];
+  const prev=((number+10)%12)+1,next=(number%12)+1,relative=`${number}${letter==='A'?'B':'A'}`;
+  const targets=[current,`${prev}${letter}`,`${next}${letter}`,relative];
+  const names=prefer==='flat'?FLAT_NAMES:SHARP_NAMES;
+  const rows=[];
+  for(let pc=0;pc<12;pc++){
+    for(const q of ['major','minor']){
+      const cam=camelotForKey(names[pc],q);
+      if(targets.includes(cam)) rows.push({key:names[pc],quality:q,camelot:cam,relation:cam===current?'same key':cam===relative?'relative major/minor':'adjacent Camelot'});
+    }
+  }
+  return rows.sort((a,b)=>targets.indexOf(a.camelot)-targets.indexOf(b.camelot));
 }
 
 export function noteFrequency(key, octave=4, a4=440) {
