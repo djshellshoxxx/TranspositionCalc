@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {
   semitoneDistance, playbackRatio, bpmAfterPitchShift, stretchPercent,
   noteDurations, loopDuration, driftMs, normalizeKey, camelotForKey,
-  openKeyForKey, noteFrequency, frequencyToNote, allTargets
+  openKeyForKey, noteFrequency, frequencyToNote, allTargets,
+  durationAfterTempoChange, djVarispeed, halfDoubleTime, harmonicNeighbors
 } from '../src/music.js';
 
 test('F# to A is +3 semitones on shortest path', () => {
@@ -54,4 +55,25 @@ test('440Hz resolves to A4 near zero cents', () => {
 
 test('allTargets emits 12 rows', () => {
   assert.equal(allTargets('C',120).length, 12);
+});
+
+test('duration follows inverse tempo ratio', () => {
+  assert.equal(durationAfterTempoChange(60,120,150),48);
+});
+
+test('DJ varispeed exposes percent and pitch consequence', () => {
+  const r=djVarispeed(120,126);
+  assert.ok(Math.abs(r.percent-5)<1e-9);
+  assert.ok(r.semitones>0);
+});
+
+test('half and double time references are correct', () => {
+  assert.deepEqual(halfDoubleTime(174),{half:87,double:348,threeQuarter:130.5,oneAndHalf:261});
+});
+
+test('harmonic neighbors include same and relative keys', () => {
+  const rows=harmonicNeighbors('C','major');
+  assert.equal(rows.length,4);
+  assert.ok(rows.some(r=>r.camelot==='8B'&&r.relation==='same key'));
+  assert.ok(rows.some(r=>r.camelot==='8A'&&r.relation==='relative major/minor'));
 });
