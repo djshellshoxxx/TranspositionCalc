@@ -24,7 +24,13 @@ Live site: https://djshellshoxxx.github.io/TranspositionCalc/
 - Playback-rate → semitone/cents reverse calculator
 - Note-frequency utility with adjustable A4 reference
 - Tap tempo
-- Shareable URL state
+- Shareable URL state (plus one-click copy of link and results)
+- Source/target swap, reset, and click-to-copy on every result
+- Varispeed key landing (which key, and how many cents off, you reach by changing speed alone)
+- Smallest-stretch suggestion using half-time/double-time of the target BPM
+- Note-synced LFO/delay frequencies in Hz
+- Hover/focus tooltips on every input, table header and result
+- Modern responsive layout with light/dark theme toggle and tap-tempo keyboard shortcut (T)
 
 ## Privacy
 

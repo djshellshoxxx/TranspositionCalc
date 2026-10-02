@@ -77,3 +77,40 @@ test('harmonic neighbors include same and relative keys', () => {
   assert.ok(rows.some(r=>r.camelot==='8B'&&r.relation==='same key'));
   assert.ok(rows.some(r=>r.camelot==='8A'&&r.relation==='relative major/minor'));
 });
+
+import { pitchClass, transposeKey, keyAfterVarispeed, bestTempoFold, delayHz } from '../src/music.js';
+
+test('key parsing accepts case and unicode accidentals but rejects junk', () => {
+  assert.equal(pitchClass('bb'), 10);
+  assert.equal(pitchClass('F♯'), 6);
+  assert.equal(pitchClass('E♭'), 3);
+  assert.throws(() => pitchClass('H'));
+  assert.throws(() => pitchClass('constructor'));
+});
+
+test('transposeKey wraps and respects notation', () => {
+  assert.equal(transposeKey('A', 3), 'C');
+  assert.equal(transposeKey('C', -1, 'flat'), 'B');
+  assert.equal(transposeKey('C', 1, 'flat'), 'Db');
+});
+
+test('keyAfterVarispeed reports landing key and detune', () => {
+  const r = keyAfterVarispeed('C', 120, 240);
+  assert.equal(r.key, 'C');
+  assert.equal(r.nearest, 12);
+  assert.ok(Math.abs(r.cents) < 1e-9);
+});
+
+test('bestTempoFold picks half-time when it needs less stretch', () => {
+  assert.equal(bestTempoFold(87, 174).factor, 0.5);
+  assert.equal(bestTempoFold(170, 174).factor, 1);
+});
+
+test('loopDuration validates BPM; allTargets omits BPM without source', () => {
+  assert.throws(() => loopDuration(0, 4, 4));
+  assert.equal(allTargets('C', NaN)[0].resultingBpm, null);
+});
+
+test('delayHz of a quarter note at 120 BPM is 2 Hz', () => {
+  assert.equal(delayHz(120), 2);
+});
