@@ -1,5 +1,36 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs."><meta name="theme-color" content="#0b1018"><title>Transposition Calculator · Circuit Drift Labs</title><link rel="icon" type="image/svg+xml" href="./favicon.svg"><link rel="stylesheet" href="./styles.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs."><meta name="theme-color" content="#0b1018"><title>Transposition Calculator — Circuit Drift Labs</title><link rel="icon" type="image/svg+xml" href="./favicon.svg"><link rel="stylesheet" href="./styles.css">  <!-- SEO: Circuit Drift Labs -->
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <link rel="canonical" href="https://djshellshoxxx.github.io/TranspositionCalc/">
+  <meta property="og:site_name" content="Circuit Drift Labs">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Transposition Calculator — Circuit Drift Labs">
+  <meta property="og:description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs.">
+  <meta property="og:url" content="https://djshellshoxxx.github.io/TranspositionCalc/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Transposition Calculator — Circuit Drift Labs">
+  <meta name="twitter:description" content="Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs.">
+  <link rel="home" href="https://djshellshoxxx.github.io/circuitdriftlabs/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Transposition Calculator — Circuit Drift Labs",
+    "url": "https://djshellshoxxx.github.io/TranspositionCalc/",
+    "description": "Transposition Calculator by Circuit Drift Labs: key, pitch, BPM, playback-rate and loop tools for producers and DJs.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Circuit Drift Labs",
+      "url": "https://djshellshoxxx.github.io/circuitdriftlabs/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Circuit Drift Labs",
+      "url": "https://djshellshoxxx.github.io/circuitdriftlabs/"
+    }
+  }
+  </script>
+</head>
 <body><header class="topbar"><a class="brand" href="https://djshellshoxxx.github.io/circuitdriftlabs/" target="_blank" rel="noreferrer"><span class="brand-mark">CDL</span><span><strong>Circuit Drift Labs</strong><small>Audio tools lab</small></span></a><nav><a href="#matcher">Sample Matcher</a><a href="#timing">Timing</a><a href="#dj">DJ Varispeed</a><a href="#tools">Tools</a></nav></header>
 <main><section class="hero"><div><p class="eyebrow">CIRCUIT DRIFT LABS / UTILITY 02</p><h1>Transposition Calculator</h1><p>Key, pitch, playback-rate, BPM, harmonic-mixing and loop calculations without opening a DAW.</p></div><div class="hero-chip">LOCAL · STATIC · NO ACCOUNT</div></section>
 <section class="panel primary" id="matcher"><div class="section-head"><div><span>01</span><h2>Sample Matcher</h2></div><p>Move a track or sample from one key and tempo to another.</p></div><div class="grid four"><label>Source key<select id="sourceKey"></select></label><label>Target key<select id="targetKey"></select></label><label>Source BPM<input id="sourceBpm" type="number" min="1" step="0.01" value="132"></label><label>Target BPM<input id="targetBpm" type="number" min="1" step="0.01" value="174"></label><label>Source duration (sec)<input id="sourceDuration" type="number" min="0" step="0.001" value="30"></label><label>Source quality<select id="sourceQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label><label>Target quality<select id="targetQuality"><option value="minor">Minor</option><option value="major">Major</option></select></label><label>Direction<select id="direction"><option value="shortest">Shortest</option><option value="up">Up only</option><option value="down">Down only</option></select></label><label>Notation<select id="notation"><option value="sharp">Sharps</option><option value="flat">Flats</option></select></label></div><div class="result-grid" id="mainResults"></div><div class="callout" id="workflowNote"></div><div class="context-link"><strong>Want to see how this track fits into the rest of your library?</strong><a href="https://djshellshoxxx.github.io/trackstats/">Analyze your collection with TrackStats →</a></div></section>
