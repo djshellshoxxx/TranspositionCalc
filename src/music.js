@@ -90,14 +90,24 @@ export function noteDurations(bpm) {
   };
 }
 
+function positiveFinite(value, label) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) throw new Error(`${label} must be a positive finite number`);
+  return n;
+}
+
 export function loopDuration(bpm, bars=4, beatsPerBar=4) {
-  return (60000 / Number(bpm)) * Number(beatsPerBar) * Number(bars) / 1000;
+  const tempo = positiveFinite(bpm, 'BPM');
+  const barCount = positiveFinite(bars, 'Bars');
+  const beats = positiveFinite(beatsPerBar, 'Beats per bar');
+  return (60 / tempo) * beats * barCount;
 }
 
 export function impliedBpm(seconds, bars=4, beatsPerBar=4) {
-  const s = Number(seconds);
-  if (!(s > 0)) throw new Error('Duration must be greater than zero');
-  return 60 * Number(beatsPerBar) * Number(bars) / s;
+  const duration = positiveFinite(seconds, 'Duration');
+  const barCount = positiveFinite(bars, 'Bars');
+  const beats = positiveFinite(beatsPerBar, 'Beats per bar');
+  return 60 * beats * barCount / duration;
 }
 
 export function driftMs(sourceBpm, targetBpm, bars=4, beatsPerBar=4) {
