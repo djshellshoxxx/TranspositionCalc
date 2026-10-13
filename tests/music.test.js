@@ -114,3 +114,25 @@ test('loopDuration validates BPM; allTargets omits BPM without source', () => {
 test('delayHz of a quarter note at 120 BPM is 2 Hz', () => {
   assert.equal(delayHz(120), 2);
 });
+
+
+test('frequency and tuning conversion rejects zero, negative and non-finite values', () => {
+  for (const bad of [0, -1, NaN, Infinity, -Infinity]) {
+    assert.throws(() => frequencyToNote(440, bad), /A4|tuning/i);
+    assert.throws(() => noteFrequency('A', 4, bad), /A4|tuning/i);
+    assert.throws(() => frequencyToNote(bad, 440), /Frequency/);
+  }
+  assert.throws(() => noteFrequency('A', NaN), /octave/i);
+  assert.throws(() => noteFrequency('A', Infinity), /octave/i);
+  assert.ok(Math.abs(noteFrequency('A', 4, 432) - 432) < 1e-9);
+  assert.equal(frequencyToNote(432, 432).note, 'A4');
+});
+
+test('delayHz rejects invalid tempo and note fractions', () => {
+  for (const bad of [0, -1, NaN, Infinity, -Infinity]) {
+    assert.throws(() => delayHz(bad), /BPM/);
+    assert.throws(() => delayHz(120, bad), /fraction/i);
+  }
+  assert.equal(delayHz(120, 0.5), 4);
+  assert.equal(delayHz(120, 2), 1);
+});

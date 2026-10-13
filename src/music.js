@@ -135,14 +135,18 @@ export function harmonicNeighbors(key, quality='major', prefer='sharp') {
 }
 
 export function noteFrequency(key, octave=4, a4=440) {
-  const midi = (Number(octave) + 1) * 12 + pitchClass(key);
-  return Number(a4) * 2 ** ((midi - 69) / 12);
+  const o = Number(octave), tuning = Number(a4);
+  if (!Number.isFinite(o)) throw new Error('Octave must be finite');
+  if (!Number.isFinite(tuning) || tuning <= 0) throw new Error('A4 tuning must be positive and finite');
+  const midi = (o + 1) * 12 + pitchClass(key);
+  return tuning * 2 ** ((midi - 69) / 12);
 }
 
 export function frequencyToNote(freq, a4=440, prefer='sharp') {
-  const f = Number(freq);
-  if (!(f > 0)) throw new Error('Frequency must be greater than zero');
-  const midiFloat = 69 + 12 * Math.log2(f / Number(a4));
+  const f = Number(freq), tuning = Number(a4);
+  if (!Number.isFinite(f) || f <= 0) throw new Error('Frequency must be positive and finite');
+  if (!Number.isFinite(tuning) || tuning <= 0) throw new Error('A4 tuning must be positive and finite');
+  const midiFloat = 69 + 12 * Math.log2(f / tuning);
   const midi = Math.round(midiFloat);
   const cents = (midiFloat - midi) * 100;
   const names = prefer === 'flat' ? FLAT_NAMES : SHARP_NAMES;
@@ -189,7 +193,8 @@ export function bestTempoFold(sourceBpm, targetBpm) {
 }
 
 export function delayHz(bpm, noteFraction = 1) {
-  const b = Number(bpm);
-  if (!(b > 0)) throw new Error('BPM must be greater than zero');
-  return b / 60 / Number(noteFraction);
+  const b = Number(bpm), fraction = Number(noteFraction);
+  if (!Number.isFinite(b) || b <= 0) throw new Error('BPM must be positive and finite');
+  if (!Number.isFinite(fraction) || fraction <= 0) throw new Error('Note fraction must be positive and finite');
+  return b / 60 / fraction;
 }
